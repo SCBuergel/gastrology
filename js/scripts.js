@@ -15,6 +15,15 @@ const proxiedWeb3Handler = {
 
 window.onload = function() {
 	let blockNumber = await proxiedWeb3.eth.getBlockNumber();
+	let numBlocks = 2;
+	let txs = [];
+	for (let blockNo = blockNumber; blockNo > blockNumber - numBlocks; blockNo--) {
+		let block = await proxiedWeb3.eth.getBlock(block);
+		block.transactions.foreach((tx, index) => {
+			console.log("Getting transaction " + tx);
+		  txs.push(await proxiedWeb3.eth.getTransaction(tx));
+		}
+	}
   var myDiv = document.createElement("div");
   myDiv.innerText = "Latest block: " + blockNumber;
   document.body.appendChild(myDiv);
