@@ -1,5 +1,4 @@
 // based on https://ethereum.stackexchange.com/a/24238
-
 const proxiedWeb3Handler = {
   get: (target, name) => {              
     const inner = target[name];                            
