@@ -35,12 +35,12 @@ let numBlocks = 10;
 let txs = new Map();
 let running = false;
 
-function toggle() {
+async function toggle() {
 	running = !running;
 	console.log("Running: " + running);
 	if (running) {
   	document.getElementById("toggleButton").innerText = "Stop";
-		loadBlocks().then();
+		await loadBlocks();
 	}
 }
 
