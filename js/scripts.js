@@ -1,4 +1,13 @@
 // based on https://ethereum.stackexchange.com/a/24238
+const promisify = (inner) =>
+  new Promise((resolve, reject) =>
+    inner((err, res) => {
+      if (err) { reject(err) }
+
+      resolve(res);
+    })
+  );
+
 const proxiedWeb3Handler = {
   get: (target, name) => {              
     const inner = target[name];                            
