@@ -42,7 +42,7 @@ async function loadBlocks() {
 		await Promise.all(block.transactions.map(async (tx) => {
 			console.log("Getting transaction " + tx);
       txs.push(await proxiedWeb3.eth.getTransaction(tx));
-		})
+		}));
 	}
   var myDiv = document.createElement("div");
   myDiv.innerText = "Latest block: " + blockNumber;
