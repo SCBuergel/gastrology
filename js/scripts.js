@@ -42,6 +42,7 @@ async function loadBlocks() {
 	 * 4. calculate, median, mean, min, max, 10th highest, 10th lowest gas price per block
 	 * 5. render
 	 */
+	let start = Date.now();
 	let blockNumber = await proxiedWeb3.eth.getBlockNumber();
 	blockNumber = 11322236; // TODO only for debugging 
 	var table = document.getElementById("gasTable");
@@ -59,11 +60,9 @@ async function loadBlocks() {
 		*/
 
 		// reading txs in parallel
-		console.log("BLOCK " + blockNo + " has " + block.transactions.length + " txs");
 		await Promise.all(block.transactions.map(async (tx) => {
-			// console.log("Getting transaction " + tx);
 			let gasPriceGWei = (await proxiedWeb3.eth.getTransaction(tx)).gasPrice.toNumber()/1e9;
-			console.log(gasPriceGWei);
+			// console.log(gasPriceGWei);
       blockTxs.push(gasPriceGWei);
 		}));
 		blockTxs.sort((a,b)=>a-b);
@@ -75,7 +74,6 @@ async function loadBlocks() {
 		let tenthLowestGas = blockTxs.length > 20 ? blockTxs[9] : "-";
 		let maxGas = blockTxs.length > 0 ? Math.max(...blockTxs) : "-";
 
-		console.log("RESULT: " + blockNo + " (" + blockTxs.length + " txs): " + minGas + ", " + medianGas + ", " + averageGas + ", " + maxGas);
 		var row = table.insertRow();
 		var cell0 = row.insertCell(0);
 		var cell1 = row.insertCell(1);
@@ -95,9 +93,9 @@ async function loadBlocks() {
 		cell7.innerHTML = typeof maxGas === 'number' ? maxGas.toFixed(2) : "-";
 		txs.set(blockNo, blockTxs);
 	}
-
+	let end = Date.now()
   var myDiv = document.createElement("div");
-  myDiv.innerText = "Latest block: " + blockNumber;
+  myDiv.innerText = "Compiled data in " + (end - start) / 1000 " seconds";
   document.body.appendChild(myDiv);
 }
 
