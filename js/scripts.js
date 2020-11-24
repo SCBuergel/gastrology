@@ -23,7 +23,7 @@ async function loadBlocks(blockNumber) {
 		block.transactions.foreach((tx, index) => {
 			console.log("Getting transaction " + tx);
 		  txs.push(await proxiedWeb3.eth.getTransaction(tx));
-		}
+		})
 	}
   var myDiv = document.createElement("div");
   myDiv.innerText = "Latest block: " + blockNumber;
