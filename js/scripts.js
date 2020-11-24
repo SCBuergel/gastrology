@@ -38,8 +38,10 @@ let running = false;
 function toggle() {
 	running = !running;
 	console.log("Running: " + running);
-	if (running)
+	if (running) {
+  	document.getElementById("toggleButton").innerText = "Stop";
 		loadBlocks().then();
+	}
 }
 
 async function loadBlocks() {
