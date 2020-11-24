@@ -75,11 +75,11 @@ async function loadBlocks() {
 		var cell4 = row.insertCell(4);
 		var cell5 = row.insertCell(5);
 		cell0.innerHTML = blockNo;
-		cell0.innerHTML = blockTxs.length;
-		cell0.innerHTML = minGas;
-		cell0.innerHTML = medianGas;
-		cell0.innerHTML = averageGas;
-		cell0.innerHTML = maxGas;
+		cell1.innerHTML = blockTxs.length;
+		cell2.innerHTML = minGas;
+		cell3.innerHTML = medianGas;
+		cell4.innerHTML = averageGas;
+		cell5.innerHTML = maxGas;
 		txs.set(blockNo, blockTxs);
 	}
 
