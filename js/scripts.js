@@ -46,7 +46,7 @@ function toggle() {
 
 async function loadLatestBlock() {
 	let blockNumber = await proxiedWeb3.eth.getBlockNumber();
-	document.getElementById("numBlocks").value = blockNumber;
+	document.getElementById("startBlock").value = blockNumber;
 }
 
 async function loadBlocks() {
