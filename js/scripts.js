@@ -44,11 +44,6 @@ async function toggle() {
 	}
 }
 
-async function loadLatestBlock() {
-	let blockNumber = await proxiedWeb3.eth.getBlockNumber();
-	document.getElementById("startBlock").value = blockNumber;
-}
-
 async function loadBlocks() {
 	/*
 	 * 1. load blocks
@@ -61,10 +56,18 @@ async function loadBlocks() {
   var myDiv = document.getElementById("outputDiv");
   myDiv.innerText = "Loading...";
 	let start = Date.now();
-	let blockNumber = parseInt(document.getElementById("startBlock").value);
+	
+	let startBlock = parseInt(document.getElementById("startBlock").value);
+	if (!startBlock) {
+		startBlock = await proxiedWeb3.eth.getBlockNumber();
+		document.getElementById("startBlock").value = startBlock;
+	}
+
 	let numBlocks = parseInt(document.getElementById("numBlocks").value);
-	numBlocks = numBlocks ? numBlocks : blockNumber;
+	numBlocks = numBlocks ? numBlocks : startBlock;
+	
 	var table = document.getElementById("gasTable");
+	
 	for (let blockNo = blockNumber; blockNo > blockNumber - numBlocks && running; blockNo--) {
 		if (txs.get(blockNo))
 			continue;
@@ -86,6 +89,7 @@ async function loadBlocks() {
 			// console.log(gasPriceGWei);
       blockTxs.push(gasPriceGWei);
 		}));
+		
 		blockTxs.sort((a,b)=>a-b);
 		let tenthHighestGas = blockTxs.length > 20 ? blockTxs[9] : "-";
 		let minGas = blockTxs.length > 0 ? Math.min(...blockTxs) : "-";
@@ -104,6 +108,7 @@ async function loadBlocks() {
 		var cell5 = row.insertCell(5);
 		var cell6 = row.insertCell(6);
 		var cell7 = row.insertCell(7);
+		
 		cell0.innerHTML = blockNo;
 		cell1.innerHTML = blockTxs.length;
 		cell2.innerHTML = typeof minGas === 'number' ? minGas.toFixed(2) : "-";
@@ -112,8 +117,10 @@ async function loadBlocks() {
 		cell5.innerHTML = typeof medianGas === 'number' ? medianGas.toFixed(2) : "-";
 		cell6.innerHTML = typeof tenthHighestGas === 'number' ? tenthHighestGas.toFixed(2) : "-";
 		cell7.innerHTML = typeof maxGas === 'number' ? maxGas.toFixed(2) : "-";
+		
 		txs.set(blockNo, blockTxs);
 	}
+
 	let end = Date.now();
   myDiv.innerText = "Compiled data in " + (end - start) / 1000 + " seconds";
   running = false;
@@ -121,7 +128,5 @@ async function loadBlocks() {
 }
 
 window.onload = function() {
-	await toggle();
-	loadLatestBlock();
-//	loadLatestBlock().then(toggle());
+	toggle();
 }
