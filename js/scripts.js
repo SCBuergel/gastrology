@@ -37,6 +37,7 @@ let running = false;
 
 function toggle() {
 	running = !running;
+	console.log("Running: " + running);
 	if (running)
 		loadBlocks().then();
 }
@@ -49,8 +50,7 @@ async function loadBlocks() {
 	 * 4. calculate, median, mean, min, max, 10th highest, 10th lowest gas price per block
 	 * 5. render
 	 */
-	if (running)
-		return;
+
 	let start = Date.now();
 	let blockNumber = await proxiedWeb3.eth.getBlockNumber();
 	blockNumber = 11322236; // TODO only for debugging 
