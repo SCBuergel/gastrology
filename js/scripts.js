@@ -24,11 +24,11 @@ const proxiedWeb3Handler = {
 const proxiedWeb3 = new Proxy(web3, proxiedWeb3Handler);
 
 async function loadBlocks() {
-	let blockNumber = await proxiedWeb3.eth.getBlockNumber()
+	let blockNumber = await proxiedWeb3.eth.getBlockNumber();
 	let numBlocks = 2;
 	let txs = [];
 	for (let blockNo = blockNumber; blockNo > blockNumber - numBlocks; blockNo--) {
-		let block = await proxiedWeb3.eth.getBlock(block);
+		let block = await proxiedWeb3.eth.getBlock(blockNo);
 		block.transactions.foreach((tx, index) => {
 			console.log("Getting transaction " + tx);
 		  txs.push(await proxiedWeb3.eth.getTransaction(tx));
