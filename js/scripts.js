@@ -62,7 +62,6 @@ async function loadBlocks() {
   myDiv.innerText = "Loading...";
 	let start = Date.now();
 	let blockNumber = parseInt(document.getElementById("startBlock").value);
-	blockNumber = 11322236; // TODO only for debugging 
 	let numBlocks = parseInt(document.getElementById("numBlocks").value);
 	numBlocks = numBlocks ? numBlocks : blockNumber;
 	var table = document.getElementById("gasTable");
