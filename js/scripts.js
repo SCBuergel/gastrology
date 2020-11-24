@@ -53,6 +53,8 @@ async function loadBlocks() {
 	 * 5. render
 	 */
 
+  var myDiv = document.getElementById("outputDiv");
+  myDiv.innerText = "Loading...";
 	let start = Date.now();
 	let blockNumber = await proxiedWeb3.eth.getBlockNumber();
 	blockNumber = 11322236; // TODO only for debugging 
@@ -109,9 +111,7 @@ async function loadBlocks() {
 		txs.set(blockNo, blockTxs);
 	}
 	let end = Date.now();
-  var myDiv = document.createElement("div");
   myDiv.innerText = "Compiled data in " + (end - start) / 1000 + " seconds";
-  document.body.appendChild(myDiv);
   running = false;
 	document.getElementById("toggleButton").innerText = "Load";
 }
