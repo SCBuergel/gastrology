@@ -68,7 +68,7 @@ async function loadBlocks() {
 	
 	var table = document.getElementById("gasTable");
 	
-	for (let blockNo = blockNumber; blockNo > startBlock - numBlocks && running; blockNo--) {
+	for (let blockNo = startBlock; blockNo > startBlock - numBlocks && running; blockNo--) {
 		if (txs.get(blockNo))
 			continue;
 		let block = await proxiedWeb3.eth.getBlock(blockNo);
