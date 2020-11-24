@@ -44,6 +44,11 @@ function toggle() {
 	}
 }
 
+async function loadLatestBlock() {
+	let blockNumber = await proxiedWeb3.eth.getBlockNumber();
+	document.getElementById("numBlocks").value = blockNumber;
+}
+
 async function loadBlocks() {
 	/*
 	 * 1. load blocks
@@ -56,7 +61,7 @@ async function loadBlocks() {
   var myDiv = document.getElementById("outputDiv");
   myDiv.innerText = "Loading...";
 	let start = Date.now();
-	let blockNumber = await proxiedWeb3.eth.getBlockNumber();
+	let blockNumber = parseInt(document.getElementById("startBlock").value);
 	blockNumber = 11322236; // TODO only for debugging 
 	let numBlocks = parseInt(document.getElementById("numBlocks").value);
 	numBlocks = numBlocks ? numBlocks : blockNumber;
@@ -117,5 +122,5 @@ async function loadBlocks() {
 }
 
 window.onload = function() {
-	toggle();
+	loadLatestBlock().then(toggle());
 }
