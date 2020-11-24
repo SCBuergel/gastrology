@@ -45,6 +45,8 @@ async function loadBlocks() {
 	let start = Date.now();
 	let blockNumber = await proxiedWeb3.eth.getBlockNumber();
 	blockNumber = 11322236; // TODO only for debugging 
+	let numBlocks = parseInt(document.getElementById("numBlocks").value);
+	numblocks = numBlocks ? numBlocks : blockNumber;
 	var table = document.getElementById("gasTable");
 	for (let blockNo = blockNumber; blockNo > blockNumber - numBlocks; blockNo--) {
 		let block = await proxiedWeb3.eth.getBlock(blockNo);
