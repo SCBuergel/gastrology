@@ -22,14 +22,14 @@ const proxiedWeb3Handler = {
 };
 
 const proxiedWeb3 = new Proxy(web3, proxiedWeb3Handler);
-let numBlocks = 2;
+let numBlocks = 10;
 let txs = new Map();
 
 async function loadBlocks() {
 	let blockNumber = await proxiedWeb3.eth.getBlockNumber();
-	let blockTxs = [];
 	for (let blockNo = blockNumber; blockNo > blockNumber - numBlocks; blockNo--) {
 		let block = await proxiedWeb3.eth.getBlock(blockNo);
+	  let blockTxs = [];
 		// reading txs in sequence
 		/*
 		for (let txIndex = 0; txIndex < block.transactions.length; txIndex++) {
@@ -52,5 +52,5 @@ async function loadBlocks() {
 }
 
 window.onload = function() {
-	loadBlocks().then(result => alert("done loading" + result));
+	loadBlocks().then();
 }
