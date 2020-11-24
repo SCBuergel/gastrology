@@ -22,11 +22,12 @@ const proxiedWeb3Handler = {
 };
 
 const proxiedWeb3 = new Proxy(web3, proxiedWeb3Handler);
+let numBlocks = 2;
+let txs = new Map();
 
 async function loadBlocks() {
 	let blockNumber = await proxiedWeb3.eth.getBlockNumber();
-	let numBlocks = 2;
-	let txs = [];
+	let blockTxs = [];
 	for (let blockNo = blockNumber; blockNo > blockNumber - numBlocks; blockNo--) {
 		let block = await proxiedWeb3.eth.getBlock(blockNo);
 		// reading txs in sequence
@@ -41,8 +42,9 @@ async function loadBlocks() {
 		// reading txs in parallel
 		await Promise.all(block.transactions.map(async (tx) => {
 			console.log("Getting transaction " + tx);
-      txs.push(await proxiedWeb3.eth.getTransaction(tx));
+      blockTxs.push(await proxiedWeb3.eth.getTransaction(tx));
 		}));
+		txs.set(blockNo, blockTxs);
 	}
   var myDiv = document.createElement("div");
   myDiv.innerText = "Latest block: " + blockNumber;
