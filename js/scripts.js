@@ -43,6 +43,7 @@ async function loadBlocks() {
 	 * 5. render
 	 */
 	let blockNumber = await proxiedWeb3.eth.getBlockNumber();
+	blockNumber = 11322236; // TODO only for debugging 
 	var table = document.getElementById("gasTable");
 	for (let blockNo = blockNumber; blockNo > blockNumber - numBlocks; blockNo--) {
 		let block = await proxiedWeb3.eth.getBlock(blockNo);
@@ -86,12 +87,12 @@ async function loadBlocks() {
 		var cell7 = row.insertCell(7);
 		cell0.innerHTML = blockNo;
 		cell1.innerHTML = blockTxs.length;
-		cell2.innerHTML = minGas.toFixed(2);
-		cell3.innerHTML = tenthLowestGas.toFixed(2);
-		cell4.innerHTML = averageGas.toFixed(2);
-		cell5.innerHTML = medianGas.toFixed(2);
-		cell6.innerHTML = tenthHighestGas.toFixed(2);
-		cell7.innerHTML = maxGas.toFixed(2);
+		cell2.innerHTML = typeof minGas === 'number' ? minGas.toFixed(2);
+		cell3.innerHTML = typeof tenthLowestGas === 'number' ? tenthLowestGas.toFixed(2);
+		cell4.innerHTML = typeof averageGas === 'number' ? averageGas.toFixed(2);
+		cell5.innerHTML = typeof medianGas === 'number' ? medianGas.toFixed(2);
+		cell6.innerHTML = typeof tenthHighestGas === 'number' ? tenthHighestGas.toFixed(2);
+		cell7.innerHTML = typeof maxGas === 'number' ? maxGas.toFixed(2);
 		txs.set(blockNo, blockTxs);
 	}
 
