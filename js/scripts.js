@@ -30,6 +30,7 @@ const median = arr => {
 
 const average = list => list.reduce((prev, curr) => prev + curr) / list.length;
 
+let web3 = new Web3(window.ethereum);
 const proxiedWeb3 = new Proxy(web3, proxiedWeb3Handler);
 let numBlocks = 10;
 let txs = new Map();
