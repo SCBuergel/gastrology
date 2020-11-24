@@ -21,15 +21,33 @@ const proxiedWeb3Handler = {
   },
 };
 
+// from https://github.com/30-seconds/30-seconds-of-code/blob/master/snippets/median.md
+const median = arr => {
+  const mid = Math.floor(arr.length / 2),
+    nums = [...arr].sort((a, b) => a - b);
+  return arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
+};
+
+const average = list => list.reduce((prev, curr) => prev + curr) / list.length;
+
 const proxiedWeb3 = new Proxy(web3, proxiedWeb3Handler);
 let numBlocks = 10;
 let txs = new Map();
 
 async function loadBlocks() {
+	/*
+	 * 1. load blocks
+	 * 2. load txs
+	 * 3. get gas prices per tx
+	 * 4. calculate, median, mean, min, max, 10th highest, 10th lowest gas price per block
+	 * 5. render
+	 */
 	let blockNumber = await proxiedWeb3.eth.getBlockNumber();
+	var table = document.getElementById("gasTable");
 	for (let blockNo = blockNumber; blockNo > blockNumber - numBlocks; blockNo--) {
 		let block = await proxiedWeb3.eth.getBlock(blockNo);
 	  let blockTxs = [];
+
 		// reading txs in sequence
 		/*
 		for (let txIndex = 0; txIndex < block.transactions.length; txIndex++) {
@@ -41,11 +59,17 @@ async function loadBlocks() {
 
 		// reading txs in parallel
 		await Promise.all(block.transactions.map(async (tx) => {
-			console.log("Getting transaction " + tx);
-      blockTxs.push(await proxiedWeb3.eth.getTransaction(tx));
+			// console.log("Getting transaction " + tx);
+      blockTxs.push((await proxiedWeb3.eth.getTransaction(tx)).gasPrice.toNumber());
 		}));
+		let minGas = Math.min(...blockTxs);
+		let medianGas = median(blockTxs);
+		let averageGas = average(blockTxs);
+		let maxGas = Math.max(...blockTxs);
+		console.log("RESULT: " + blockNo + " (" + blockTxs.length + " txs): " + minGas + ", " + medianGas + ", " + averageGas + ", " + maxGas);
 		txs.set(blockNo, blockTxs);
 	}
+
   var myDiv = document.createElement("div");
   myDiv.innerText = "Latest block: " + blockNumber;
   document.body.appendChild(myDiv);
