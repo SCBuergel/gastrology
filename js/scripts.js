@@ -62,10 +62,15 @@ async function loadBlocks() {
 			// console.log("Getting transaction " + tx);
       blockTxs.push((await proxiedWeb3.eth.getTransaction(tx)).gasPrice.toNumber()/1e9);
 		}));
-		let minGas = Math.min(...blockTxs);
-		let medianGas = median(blockTxs);
-		let averageGas = average(blockTxs);
-		let maxGas = Math.max(...blockTxs);
+		blockTxs.sort();
+		let 10highestGas = blockTxs.length > 20 ? blockTxs[9] : "-";
+		let minGas = blockTxs.length > 0 ? Math.min(...blockTxs) : "-";
+		let medianGas = blockTxs.length > 0 ? median(blockTxs) : "-";
+		let averageGas = blockTxs.length > 0 ? average(blockTxs) : "-";
+		blockTxs.reverse();
+		let 10lowestGas = blockTxs.length > 20 ? blockTxs[9] : "-";
+		let maxGas = blockTxs.length > 0 ? Math.max(...blockTxs) : "-";
+
 		console.log("RESULT: " + blockNo + " (" + blockTxs.length + " txs): " + minGas + ", " + medianGas + ", " + averageGas + ", " + maxGas);
 		var row = table.insertRow();
 		var cell0 = row.insertCell(0);
@@ -74,12 +79,16 @@ async function loadBlocks() {
 		var cell3 = row.insertCell(3);
 		var cell4 = row.insertCell(4);
 		var cell5 = row.insertCell(5);
+		var cell6 = row.insertCell(6);
+		var cell7 = row.insertCell(7);
 		cell0.innerHTML = blockNo;
 		cell1.innerHTML = blockTxs.length;
-		cell2.innerHTML = minGas;
-		cell3.innerHTML = medianGas;
-		cell4.innerHTML = averageGas;
-		cell5.innerHTML = maxGas;
+		cell2.innerHTML = minGas.toFixed(2);
+		cell3.innerHTML = 10lowest.toFixed(2);
+		cell4.innerHTML = medianGas.toFixed(2);
+		cell5.innerHTML = averageGas.toFixed(2);
+		cell6.innerHTML = 10highestGas.toFixed(2);
+		cell7.innerHTML = maxGas.toFixed(2);
 		txs.set(blockNo, blockTxs);
 	}
 
