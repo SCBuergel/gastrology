@@ -79,7 +79,7 @@ async function loadBlocks() {
 		cell0.innerHTML = minGas;
 		cell0.innerHTML = medianGas;
 		cell0.innerHTML = averageGas;
-		cell0.innerHTML = masGas;
+		cell0.innerHTML = maxGas;
 		txs.set(blockNo, blockTxs);
 	}
 
