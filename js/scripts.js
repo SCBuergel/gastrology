@@ -84,7 +84,7 @@ async function loadBlocks() {
 		cell0.innerHTML = blockNo;
 		cell1.innerHTML = blockTxs.length;
 		cell2.innerHTML = minGas.toFixed(2);
-		cell3.innerHTML = tenthLowest.toFixed(2);
+		cell3.innerHTML = tenthLowestGas.toFixed(2);
 		cell4.innerHTML = medianGas.toFixed(2);
 		cell5.innerHTML = averageGas.toFixed(2);
 		cell6.innerHTML = tenthHighestGas.toFixed(2);
