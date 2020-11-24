@@ -121,7 +121,7 @@ async function loadBlocks() {
 }
 
 window.onload = function() {
-	toggle();
+	await toggle();
 	loadLatestBlock();
 //	loadLatestBlock().then(toggle());
 }
