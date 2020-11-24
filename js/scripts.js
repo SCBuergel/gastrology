@@ -29,11 +29,20 @@ async function loadBlocks() {
 	let txs = [];
 	for (let blockNo = blockNumber; blockNo > blockNumber - numBlocks; blockNo--) {
 		let block = await proxiedWeb3.eth.getBlock(blockNo);
+		// reading txs in sequence
+		/*
 		for (let txIndex = 0; txIndex < block.transactions.length; txIndex++) {
 			let tx = block.transactions[txIndex];
 			console.log("Getting transaction " + tx);
 		  txs.push(await proxiedWeb3.eth.getTransaction(tx));
 		}
+		*/
+
+		// reading txs in parallel
+		await Promise.all(block.transactions.map(async (tx) => {
+			console.log("Getting transaction " + tx);
+      txs.push(await proxiedWeb3.eth.getTransaction(tx));
+		})
 	}
   var myDiv = document.createElement("div");
   myDiv.innerText = "Latest block: " + blockNumber;
