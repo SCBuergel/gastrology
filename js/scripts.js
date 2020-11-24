@@ -95,7 +95,7 @@ async function loadBlocks() {
 	}
 	let end = Date.now()
   var myDiv = document.createElement("div");
-  myDiv.innerText = "Compiled data in " + (end - start) / 1000 " seconds";
+  myDiv.innerText = "Compiled data in " + (end - start) / 1000 + " seconds";
   document.body.appendChild(myDiv);
 }
 
