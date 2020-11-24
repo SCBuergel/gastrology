@@ -63,12 +63,12 @@ async function loadBlocks() {
       blockTxs.push((await proxiedWeb3.eth.getTransaction(tx)).gasPrice.toNumber()/1e9);
 		}));
 		blockTxs.sort();
-		let 10highestGas = blockTxs.length > 20 ? blockTxs[9] : "-";
+		let tenthHighestGas = blockTxs.length > 20 ? blockTxs[9] : "-";
 		let minGas = blockTxs.length > 0 ? Math.min(...blockTxs) : "-";
 		let medianGas = blockTxs.length > 0 ? median(blockTxs) : "-";
 		let averageGas = blockTxs.length > 0 ? average(blockTxs) : "-";
 		blockTxs.reverse();
-		let 10lowestGas = blockTxs.length > 20 ? blockTxs[9] : "-";
+		let tenthLowestGas = blockTxs.length > 20 ? blockTxs[9] : "-";
 		let maxGas = blockTxs.length > 0 ? Math.max(...blockTxs) : "-";
 
 		console.log("RESULT: " + blockNo + " (" + blockTxs.length + " txs): " + minGas + ", " + medianGas + ", " + averageGas + ", " + maxGas);
@@ -84,10 +84,10 @@ async function loadBlocks() {
 		cell0.innerHTML = blockNo;
 		cell1.innerHTML = blockTxs.length;
 		cell2.innerHTML = minGas.toFixed(2);
-		cell3.innerHTML = 10lowest.toFixed(2);
+		cell3.innerHTML = tenthLowest.toFixed(2);
 		cell4.innerHTML = medianGas.toFixed(2);
 		cell5.innerHTML = averageGas.toFixed(2);
-		cell6.innerHTML = 10highestGas.toFixed(2);
+		cell6.innerHTML = tenthHighestGas.toFixed(2);
 		cell7.innerHTML = maxGas.toFixed(2);
 		txs.set(blockNo, blockTxs);
 	}
