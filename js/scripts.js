@@ -60,13 +60,26 @@ async function loadBlocks() {
 		// reading txs in parallel
 		await Promise.all(block.transactions.map(async (tx) => {
 			// console.log("Getting transaction " + tx);
-      blockTxs.push((await proxiedWeb3.eth.getTransaction(tx)).gasPrice.toNumber());
+      blockTxs.push((await proxiedWeb3.eth.getTransaction(tx)).gasPrice.toNumber()/1e9);
 		}));
 		let minGas = Math.min(...blockTxs);
 		let medianGas = median(blockTxs);
 		let averageGas = average(blockTxs);
 		let maxGas = Math.max(...blockTxs);
 		console.log("RESULT: " + blockNo + " (" + blockTxs.length + " txs): " + minGas + ", " + medianGas + ", " + averageGas + ", " + maxGas);
+		var row = table.insertRow();
+		var cell0 = row.insertCell(0);
+		var cell1 = row.insertCell(1);
+		var cell2 = row.insertCell(2);
+		var cell3 = row.insertCell(3);
+		var cell4 = row.insertCell(4);
+		var cell5 = row.insertCell(5);
+		cell0.innerHTML = blockNo;
+		cell0.innerHTML = blockTxs.length;
+		cell0.innerHTML = minGas;
+		cell0.innerHTML = medianGas;
+		cell0.innerHTML = averageGas;
+		cell0.innerHTML = masGas;
 		txs.set(blockNo, blockTxs);
 	}
 
