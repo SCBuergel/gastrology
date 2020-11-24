@@ -37,6 +37,8 @@ let running = false;
 
 function toggle() {
 	running = !running;
+	if (running)
+		loadBlocks().then();
 }
 
 async function loadBlocks() {
@@ -111,5 +113,5 @@ async function loadBlocks() {
 }
 
 window.onload = function() {
-	loadBlocks().then();
+	toggle();
 }
