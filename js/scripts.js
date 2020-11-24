@@ -14,8 +14,8 @@ const proxiedWeb3Handler = {
 
 const proxiedWeb3 = new Proxy(web3, proxiedWeb3Handler);
 
-async function loadBlocks(blockNumber) {
-
+async function loadBlocks() {
+	let blockNumber = await proxiedWeb3.eth.getBlockNumber()
 	let numBlocks = 2;
 	let txs = [];
 	for (let blockNo = blockNumber; blockNo > blockNumber - numBlocks; blockNo--) {
@@ -31,5 +31,5 @@ async function loadBlocks(blockNumber) {
 }
 
 window.onload = function() {
-	proxiedWeb3.eth.getBlockNumber().then(result => alert("done loading" + result));
+	loadBlocks().then(result => alert("done loading" + result));
 }
