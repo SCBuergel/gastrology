@@ -71,7 +71,7 @@ async function loadBlocks() {
 		let minGas = blockTxs.length > 0 ? Math.min(...blockTxs) : "-";
 		let medianGas = blockTxs.length > 0 ? median(blockTxs) : "-";
 		let averageGas = blockTxs.length > 0 ? average(blockTxs) : "-";
-		blockTxs.sort((a,b)=>a-b);
+		blockTxs.sort((a,b)=>b-a);
 		let tenthLowestGas = blockTxs.length > 20 ? blockTxs[9] : "-";
 		let maxGas = blockTxs.length > 0 ? Math.max(...blockTxs) : "-";
 
