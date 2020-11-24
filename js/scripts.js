@@ -33,6 +33,11 @@ const average = list => list.reduce((prev, curr) => prev + curr) / list.length;
 const proxiedWeb3 = new Proxy(web3, proxiedWeb3Handler);
 let numBlocks = 10;
 let txs = new Map();
+let running = false;
+
+function toggle() {
+	running = !running;
+}
 
 async function loadBlocks() {
 	/*
@@ -42,13 +47,15 @@ async function loadBlocks() {
 	 * 4. calculate, median, mean, min, max, 10th highest, 10th lowest gas price per block
 	 * 5. render
 	 */
+	if (running)
+		return;
 	let start = Date.now();
 	let blockNumber = await proxiedWeb3.eth.getBlockNumber();
 	blockNumber = 11322236; // TODO only for debugging 
 	let numBlocks = parseInt(document.getElementById("numBlocks").value);
 	numblocks = numBlocks ? numBlocks : blockNumber;
 	var table = document.getElementById("gasTable");
-	for (let blockNo = blockNumber; blockNo > blockNumber - numBlocks; blockNo--) {
+	for (let blockNo = blockNumber; blockNo > blockNumber - numBlocks && running; blockNo--) {
 		let block = await proxiedWeb3.eth.getBlock(blockNo);
 	  let blockTxs = [];
 
@@ -95,10 +102,12 @@ async function loadBlocks() {
 		cell7.innerHTML = typeof maxGas === 'number' ? maxGas.toFixed(2) : "-";
 		txs.set(blockNo, blockTxs);
 	}
-	let end = Date.now()
+	let end = Date.now();
   var myDiv = document.createElement("div");
   myDiv.innerText = "Compiled data in " + (end - start) / 1000 + " seconds";
   document.body.appendChild(myDiv);
+  running = false;
+	document.getElementById("toggleButton").innerText = "Load";
 }
 
 window.onload = function() {
