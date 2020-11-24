@@ -83,10 +83,11 @@ async function loadBlocks() {
 		}
 		*/
 
+		console.log("BLOCK " + blockNo + " (" + block.transactions.length + " txs)");
 		// reading txs in parallel
 		await Promise.all(block.transactions.map(async (tx) => {
 			let gasPriceGWei = (await proxiedWeb3.eth.getTransaction(tx)).gasPrice.toNumber()/1e9;
-			// console.log(gasPriceGWei);
+			console.log(gasPriceGWei);
       blockTxs.push(gasPriceGWei);
 		}));
 		
