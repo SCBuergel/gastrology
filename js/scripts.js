@@ -12,8 +12,10 @@ const proxiedWeb3Handler = {
   },
 };
 
-window.onload = function() {
-	let blockNumber = await proxiedWeb3.eth.getBlockNumber();
+const proxiedWeb3 = new Proxy(web3, proxiedWeb3Handler);
+
+async function loadBlocks(blockNumber) {
+
 	let numBlocks = 2;
 	let txs = [];
 	for (let blockNo = blockNumber; blockNo > blockNumber - numBlocks; blockNo--) {
@@ -26,4 +28,8 @@ window.onload = function() {
   var myDiv = document.createElement("div");
   myDiv.innerText = "Latest block: " + blockNumber;
   document.body.appendChild(myDiv);
+}
+
+window.onload = function() {
+	proxiedWeb3.eth.getBlockNumber().then(result => alert("done loading" + result));
 }
