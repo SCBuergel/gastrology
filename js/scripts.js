@@ -87,12 +87,12 @@ async function loadBlocks() {
 		var cell7 = row.insertCell(7);
 		cell0.innerHTML = blockNo;
 		cell1.innerHTML = blockTxs.length;
-		cell2.innerHTML = typeof minGas === 'number' ? minGas.toFixed(2);
-		cell3.innerHTML = typeof tenthLowestGas === 'number' ? tenthLowestGas.toFixed(2);
-		cell4.innerHTML = typeof averageGas === 'number' ? averageGas.toFixed(2);
-		cell5.innerHTML = typeof medianGas === 'number' ? medianGas.toFixed(2);
-		cell6.innerHTML = typeof tenthHighestGas === 'number' ? tenthHighestGas.toFixed(2);
-		cell7.innerHTML = typeof maxGas === 'number' ? maxGas.toFixed(2);
+		cell2.innerHTML = typeof minGas === 'number' ? minGas.toFixed(2) : "-";
+		cell3.innerHTML = typeof tenthLowestGas === 'number' ? tenthLowestGas.toFixed(2) : "-";
+		cell4.innerHTML = typeof averageGas === 'number' ? averageGas.toFixed(2) : "-";
+		cell5.innerHTML = typeof medianGas === 'number' ? medianGas.toFixed(2) : "-";
+		cell6.innerHTML = typeof tenthHighestGas === 'number' ? tenthHighestGas.toFixed(2) : "-";
+		cell7.innerHTML = typeof maxGas === 'number' ? maxGas.toFixed(2) : "-";
 		txs.set(blockNo, blockTxs);
 	}
 
