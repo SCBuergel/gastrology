@@ -133,7 +133,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 	for (let c = 0; c < bins.length; c++) {
 		let colorIndex = Math.floor((bins[c] - minBin) / (maxBin - minBin) * deltaBin);
 		console.log("bin " + c + " has color " + colorIndex);
-		cell8.innerText += colorLUT(colorIndex);
+		cell8.innerText += colorLUT[colorIndex];
 	}
 	/*
 	 * |min   |      |      |      |   max|
