@@ -78,7 +78,7 @@ function createWeb3() {
 }
 
 function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
-	console.log("start rendering..."
+	console.log("start rendering...");
 	var table = document.getElementById("gasTable");
 
 	blockTxs.sort((a,b)=>a-b);
