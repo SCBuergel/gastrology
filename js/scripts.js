@@ -116,7 +116,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 		bins[c] = 0;
 	}
 	let delta = (globalMaxGasGWei - globalMinGasGWei) / numBins;
-	console.log("delta: " + delta);
+	console.log("globalMaxGasGWei: " + globalMaxGasGWei + ", globalMinGasGWei: " + globalMaxGasGWei + ", delta: " + delta);
 
 	for (let c = 0; c < blockGasUsed.length; c++) {
 		let binIndex = Math.floor((blockTxs[c] - globalMinGasGWei) / (globalMaxGasGWei - globalMinGasGWei ) *delta);
@@ -131,6 +131,12 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 	let deltaBin = (maxBin - minBin) / numColors;
 	console.log("minBin: " + minBin + ", maxBin: " + maxBin + ", deltaBin: " + deltaBin);
 	let colorLUT = [" ", "░", "▒", "▓", "█"];
+	
+	if (maxBin == minBin) {
+		console.log("too few entries for rendering");
+		return;
+	}
+
 	for (let c = 0; c < bins.length; c++) {
 		let colorIndex = Math.floor((bins[c] - minBin) / (maxBin - minBin) * deltaBin);
 		console.log("bin " + c + " has color " + colorIndex);
