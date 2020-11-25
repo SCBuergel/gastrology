@@ -124,6 +124,10 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 		bins[binIndex] += blockGasUsed[c];
 	}
 
+	for (let c = 0; c < bins.length; c++) {
+		console.log("bin " + c + ": " + bins[c]);
+	}
+
 	console.log("loaded bins");
 	let numColors = 5;
 	let minBin = Math.min(...bins);
