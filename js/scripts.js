@@ -98,6 +98,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 	var cell5 = row.insertCell(5);
 	var cell6 = row.insertCell(6);
 	var cell7 = row.insertCell(7);
+	var cell8 = row.insertCell(8);
 
 	cell0.innerHTML = blockNo;
 	cell1.innerHTML = blockTxs.length;
@@ -107,6 +108,37 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 	cell5.innerHTML = typeof averageGas === 'number' ? averageGas.toFixed(2) : "-";
 	cell6.innerHTML = typeof tenthHighestGas === 'number' ? tenthHighestGas.toFixed(2) : "-";
 	cell7.innerHTML = typeof maxGas === 'number' ? maxGas.toFixed(2) : "-";
+	
+	const numBins = 20;
+	let bins = [];
+	for (let c = 0; c < numBins; c++) {
+		bins[c] = 0;
+	}
+	let delta = (globalMaxGasGWei - globalMinGasGWei) / numBins;
+
+	for (let c = 0; c < blockGasUsed.length; c++) {
+		let binIndex = Math.floor((blockGasUsed[c] - globalMinGasGWei) / delta);
+		bins[binIndex] += blockTxs[c];
+	}
+
+	let numColors = 5;
+	let minBin = Math.min(...bins);
+	let maxBin = Math.mas(...bins);
+	let deltaBin = (maxBin - minBin) / numColors;
+	let colorLUT = ["&nbsp;", "&blk14;", "&blk12;", "&blk34;", "&block;"];
+	for (let c = 0; c < bins.length; c++) {
+		let colorIndex = Math.floor((bins[c] - minBin) / deltaBin);
+		cell8.innerText += colorLUT(colorIndex);
+	}
+	/*
+	 * |min   |      |      |      |   max|
+	 * delta = (max - min) / numBuckets
+	 * bucketIndex = floor((gasPrice - min) / delta)
+	 * 1. calculate bucket boundaries based on global gas price min/max and number of buckets
+	 * 2. create gasUsedPerBucket array, loop over all txs: find out which gasPrice bucket they belong in and add the gasUsed there
+	 * 3. find min and max of bucket array and bin it in 5 domains
+	 * 4. render each bucket as one of 5 ASCII chars
+	 */
 }
 
 async function loadBlocks() {
