@@ -131,7 +131,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 	let deltaBin = (maxBin - minBin) / numColors;
 	let colorLUT = ["&nbsp;", "&blk14;", "&blk12;", "&blk34;", "&block;"];
 	for (let c = 0; c < bins.length; c++) {
-		let colorIndex = Math.floor((bins[c] - minBin) / deltaBin);
+		let colorIndex = Math.floor((bins[c] - minBin) / (maxBin - minBin) * deltaBin);
 		console.log("bin " + c + " has color " + colorIndex);
 		cell8.innerText += colorLUT(colorIndex);
 	}
