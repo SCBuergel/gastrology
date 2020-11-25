@@ -146,7 +146,7 @@ async function loadBlocks() {
 		// reading txs in parallel
 		await Promise.all(block.transactions.map(async (tx) => {
 			let gasPriceGWei = (await proxiedWeb3.eth.getTransaction(tx)).gasPrice/1e9;
-			let gasUsed = (await proxiedWeb3.eth.getTransactionReceipt(b.transactions[0])).gasUsed
+			let gasUsed = (await proxiedWeb3.eth.getTransactionReceipt(tx)).gasUsed
 			console.log(gasPriceGWei);
       blockGasPrice.push(gasPriceGWei);
       blockGasUsed.push(gasUsed);
