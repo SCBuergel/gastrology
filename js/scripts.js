@@ -78,6 +78,7 @@ function createWeb3() {
 }
 
 function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
+	console.log("start rendering..."
 	var table = document.getElementById("gasTable");
 
 	blockTxs.sort((a,b)=>a-b);
@@ -115,12 +116,14 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 		bins[c] = 0;
 	}
 	let delta = (globalMaxGasGWei - globalMinGasGWei) / numBins;
+	console.log("delta: " + delta);
 
 	for (let c = 0; c < blockGasUsed.length; c++) {
 		let binIndex = Math.floor((blockGasUsed[c] - globalMinGasGWei) / delta);
 		bins[binIndex] += blockTxs[c];
 	}
 
+	console.log("loaded bins");
 	let numColors = 5;
 	let minBin = Math.min(...bins);
 	let maxBin = Math.mas(...bins);
@@ -128,6 +131,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 	let colorLUT = ["&nbsp;", "&blk14;", "&blk12;", "&blk34;", "&block;"];
 	for (let c = 0; c < bins.length; c++) {
 		let colorIndex = Math.floor((bins[c] - minBin) / deltaBin);
+		console.log("bin " + c + " has color " + colorIndex);
 		cell8.innerText += colorLUT(colorIndex);
 	}
 	/*
