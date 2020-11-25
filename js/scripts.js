@@ -34,6 +34,8 @@ let proxiedWeb3;
 let numBlocks = 10;
 let txs = new Map();
 let running = false;
+let globalMinGasGW = Number.MAX_SAFE_INTEGER;
+let globalMaxGasGW = Number.MIN_SAFE_INTEGER;
 
 async function toggle() {
 	running = !running;
@@ -75,7 +77,7 @@ function createWeb3() {
   proxiedWeb3 = new Proxy(web3, proxiedWeb3Handler);
 }
 
-function renderBlock(blockNo, blockTxs) {
+function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 	var table = document.getElementById("gasTable");
 
 	blockTxs.sort((a,b)=>a-b);
@@ -143,16 +145,25 @@ async function loadBlocks() {
 	  let blockGasUsed = [];
 
 		console.log("BLOCK " + blockNo + " (" + block.transactions.length + " txs)");
+		let globalLimitsChanged = false;
 		// reading txs in parallel
 		await Promise.all(block.transactions.map(async (tx) => {
 			let gasPriceGWei = (await proxiedWeb3.eth.getTransaction(tx)).gasPrice/1e9;
 			let gasUsed = (await proxiedWeb3.eth.getTransactionReceipt(tx)).gasUsed
+			if (gasPriceGWei < globalMinGasGWi) {
+				globalMinGasGW = gasPriceGWei;
+				globalLimitsChanged = true;
+			}
+			if (gasPriceGWei > globalMaxGasGW) {
+				globalMaxGasGW = gasPriceGWei;
+				globalLimitsChanged = true;
+			}
 			console.log(gasPriceGWei);
       blockGasPrice.push(gasPriceGWei);
       blockGasUsed.push(gasUsed);
 		}));
 
-		renderBlock(blockNo, blockGasPrice);
+		renderBlock(blockNo, blockGasPrice, blockGasUsed, globalLimitsChanged);
 
 		txs.set(blockNo, 
 			{
