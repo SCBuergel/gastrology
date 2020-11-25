@@ -75,7 +75,7 @@ function createWeb3() {
   proxiedWeb3 = new Proxy(web3, proxiedWeb3Handler);
 }
 
-function renderBlock(blockTxs) {
+function renderBlock(blockNo, blockTxs) {
 	var table = document.getElementById("gasTable");
 
 	blockTxs.sort((a,b)=>a-b);
@@ -152,7 +152,7 @@ async function loadBlocks() {
       blockGasUsed.push(gasUsed);
 		}));
 
-		renderBlock(blockGasPrice);
+		renderBlock(blockNo, blockGasPrice);
 
 		txs.set(blockNo, 
 			{
