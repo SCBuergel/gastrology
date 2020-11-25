@@ -22,6 +22,7 @@
   <button id="toggleButton" onclick="toggle()">Load</button>
   <h2>Gas prices per block in GWei</h2>
   <table id="gasTable" style="text-align:right">
+  	<thead>
   	<tr>
   		<th width=100>block</th>
   		<th width=70>#txs</th>
@@ -33,6 +34,9 @@
   		<th width=70>max</th>
   		<th width=200>gas spectrum</th>
   	</tr>
+  	</thead>
+  	<tbody id="tbody">
+  	</tbody>
   </table>
   <div id="outputDiv"></div>
   DethGasStation is FOSS built by <a target="_blank" href="https://twitter.com/scbuergel">SCBuergel</a> at <a target="_blank" href="https://github.com/SCBuergel/dethgasstation">github.com/SCBuergel/dethgasstation</a>

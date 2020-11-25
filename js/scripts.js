@@ -37,6 +37,17 @@ let running = false;
 let globalMinGasGWei = Number.MAX_SAFE_INTEGER;
 let globalMaxGasGWei = Number.MIN_SAFE_INTEGER;
 
+function resetAll() {
+	txs.forEach((val, key, map) => {
+		val.row.remove();
+	});
+	txs = new Map();
+	running = false;
+	proxiedWeb3 = undefined;
+	globalMinGasGWei = Number.MAX_SAFE_INTEGER;
+	globalMaxGasGWei = Number.MIN_SAFE_INTEGER;
+}
+
 async function toggle() {
 	running = !running;
 	console.log("Running: " + running);
@@ -147,25 +158,13 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 		console.log("bin " + c + " has color " + colorIndex);
 		cell8.innerText += colorLUT[colorIndex];
 	}
-	/*
-	 * |min   |      |      |      |   max|
-	 * delta = (max - min) / numBuckets
-	 * bucketIndex = floor((gasPrice - min) / delta)
-	 * 1. calculate bucket boundaries based on global gas price min/max and number of buckets
-	 * 2. create gasUsedPerBucket array, loop over all txs: find out which gasPrice bucket they belong in and add the gasUsed there
-	 * 3. find min and max of bucket array and bin it in 5 domains
-	 * 4. render each bucket as one of 5 ASCII chars
-	 */
+
+	let block = txs.get(blockNo);
+	block.row = row;
+	txs.set(blockNo) = block;
 }
 
 async function loadBlocks() {
-	/*
-	 * 1. load blocks
-	 * 2. load txs
-	 * 3. get gas prices per tx
-	 * 4. calculate, median, mean, min, max, 10th highest, 10th lowest gas price per block
-	 * 5. render
-	 */
 
   var myDiv = document.getElementById("outputDiv");
   myDiv.innerText = "Loading...";
