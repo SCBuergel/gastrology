@@ -34,8 +34,8 @@ let proxiedWeb3;
 let numBlocks = 10;
 let txs = new Map();
 let running = false;
-let globalMinGasGW = Number.MAX_SAFE_INTEGER;
-let globalMaxGasGW = Number.MIN_SAFE_INTEGER;
+let globalMinGasGWei = Number.MAX_SAFE_INTEGER;
+let globalMaxGasGWei = Number.MIN_SAFE_INTEGER;
 
 async function toggle() {
 	running = !running;
@@ -150,12 +150,12 @@ async function loadBlocks() {
 		await Promise.all(block.transactions.map(async (tx) => {
 			let gasPriceGWei = (await proxiedWeb3.eth.getTransaction(tx)).gasPrice/1e9;
 			let gasUsed = (await proxiedWeb3.eth.getTransactionReceipt(tx)).gasUsed
-			if (gasPriceGWei < globalMinGasGWi) {
-				globalMinGasGW = gasPriceGWei;
+			if (gasPriceGWei < globalMinGasGWei) {
+				globalMinGasGWei = gasPriceGWei;
 				globalLimitsChanged = true;
 			}
-			if (gasPriceGWei > globalMaxGasGW) {
-				globalMaxGasGW = gasPriceGWei;
+			if (gasPriceGWei > globalMaxGasGWei) {
+				globalMaxGasGWei = gasPriceGWei;
 				globalLimitsChanged = true;
 			}
 			console.log(gasPriceGWei);
