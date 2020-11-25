@@ -125,6 +125,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 	}
 
 	for (let c = 0; c < bins.length; c++) {
+		bins[c] = bins[c] > 0 ? Math.log(bins[c]) : bins[c];
 		console.log("bin " + c + ": " + bins[c]);
 	}
 
