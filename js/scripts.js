@@ -118,7 +118,7 @@ async function loadBlocks() {
   myDiv.innerText = "Loading...";
 	let start = Date.now();
 
-	createWeb();
+	createWeb3();
 
 	// connection check to see if endpoint is available
 	console.log("trying to load latest block to see if all is ok...");
