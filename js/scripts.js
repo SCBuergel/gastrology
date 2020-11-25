@@ -150,7 +150,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 	
 	if (maxBin == minBin) {
 		console.log("too few entries for rendering");
-		return;
+		return row;
 	}
 
 	for (let c = 0; c < bins.length; c++) {
@@ -159,9 +159,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 		cell8.innerText += colorLUT[colorIndex];
 	}
 
-	let block = txs.get(blockNo);
-	block.row = row;
-	txs.set(blockNo) = block;
+	return row;
 }
 
 async function loadBlocks() {
@@ -211,12 +209,13 @@ async function loadBlocks() {
       blockGasUsed.push(gasUsed);
 		}));
 
-		renderBlock(blockNo, blockGasPrice, blockGasUsed, globalLimitsChanged);
+		let tableRow = renderBlock(blockNo, blockGasPrice, blockGasUsed, globalLimitsChanged);
 
 		txs.set(blockNo, 
 			{
 				gasPricesGWei: blockGasPrice,
-				gasUsed: blockGasUsed
+				gasUsed: blockGasUsed,
+				row: tableRow
 			}
 		);
 	}
