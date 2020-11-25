@@ -119,15 +119,15 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 	console.log("delta: " + delta);
 
 	for (let c = 0; c < blockGasUsed.length; c++) {
-		let binIndex = Math.floor((blockGasUsed[c] - globalMinGasGWei) / (globalMaxGasGWei - globalMinGasGWei ) *delta);
+		let binIndex = Math.floor((blockTxs[c] - globalMinGasGWei) / (globalMaxGasGWei - globalMinGasGWei ) *delta);
 		console.log("bin index: " + binIndex);
-		bins[binIndex] += blockTxs[c];
+		bins[binIndex] += blockGasUsed[c];
 	}
 
 	console.log("loaded bins");
 	let numColors = 5;
 	let minBin = Math.min(...bins);
-	let maxBin = Math.mas(...bins);
+	let maxBin = Math.max(...bins);
 	let deltaBin = (maxBin - minBin) / numColors;
 	let colorLUT = ["&nbsp;", "&blk14;", "&blk12;", "&blk34;", "&block;"];
 	for (let c = 0; c < bins.length; c++) {
