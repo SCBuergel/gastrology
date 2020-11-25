@@ -30,8 +30,7 @@ const median = arr => {
 
 const average = list => list.reduce((prev, curr) => prev + curr) / list.length;
 
-let web3 = new Web3(window.ethereum);
-const proxiedWeb3 = new Proxy(web3, proxiedWeb3Handler);
+let proxiedWeb3;
 let numBlocks = 10;
 let txs = new Map();
 let running = false;
@@ -58,9 +57,49 @@ async function loadBlocks() {
   myDiv.innerText = "Loading...";
 	let start = Date.now();
 	
+	/* TODO: 
+	 * 1. check if custom web3 project has already been create, if not -> create it and also proxy wrapper
+	 * 2. check if window.ethereum is available, otherwise fallback to Seb's infura:
+	 */
+
+	// create web3 object if it does not exist yet
+	if (typeof proxiedWeb3 == "undefined") {
+		console.log("did not find proxiedWeb3, creating now...");
+		let endpointInput = document.getElementById("web3Endpoint").value;
+    let endpoint;
+
+    // first try to use the default value (if that's written in input field):
+    if (endpointInput == "window.ethereum") {
+    	console.log("trying to use window.ethereum...");
+    	// if that does not exist, update UI and try fallback to Avado RYO
+    	if (typeof window.ethereum == "undefined") {
+    		console.log("cannot find window.ethereum, switching to Avado RYO...");
+    		endpoint = "https://mainnet.eth.cloud.ava.do";
+    		document.getElementById("web3Endpoint").value = "https://mainnet.eth.cloud.ava.do";
+    		document.getElementById("outputDiv").innerText = "Did not find local web3 provider, switched to Avado RYO. ";
+    	} else {
+    		console.log("seems ok, using window.ethereum...")
+    		endpoint = window.ethereum;
+    	}
+    } else {
+    	console.log("using custom web3 endpoint: " + endpointInput);
+    	// otherwise just try to use the one provided
+    	endpoint = endpointInput;
+    }
+
+  	// finally create the objects and try using that endpoint to obtain the latest block number to see if all is ok
+  	console.log("now creating web3 object...");
+  	let web3 = new Web3(endpoint);
+  	proxiedWeb3 = new Proxy(web3, proxiedWeb3Handler);
+	}
+
+	// connection check to see if endpoint is available
+	console.log("trying to load latest block to see if all is ok...");
+	let latestBlockFromChain = await proxiedWeb3.eth.getBlockNumber();
+
 	let startBlock = parseInt(document.getElementById("startBlock").value);
 	if (!startBlock) {
-		startBlock = await proxiedWeb3.eth.getBlockNumber();
+		startBlock = latestBlockFromChain;
 		document.getElementById("startBlock").value = startBlock;
 	}
 
@@ -101,6 +140,7 @@ async function loadBlocks() {
 		let tenthHighestGas = blockTxs.length > 20 ? blockTxs[9] : "-";
 		let maxGas = blockTxs.length > 0 ? Math.max(...blockTxs) : "-";
 
+		// TODO: check where in the table this row should be added
 		var row = table.insertRow();
 		var cell0 = row.insertCell(0);
 		var cell1 = row.insertCell(1);
