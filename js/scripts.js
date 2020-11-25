@@ -119,7 +119,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 	console.log("delta: " + delta);
 
 	for (let c = 0; c < blockGasUsed.length; c++) {
-		let binIndex = Math.floor((blockGasUsed[c] - globalMinGasGWei) / delta);
+		let binIndex = Math.floor((blockGasUsed[c] - globalMinGasGWei) / (globalMaxGasGWei - globalMinGasGWei ) *delta);
 		console.log("bin index: " + binIndex);
 		bins[binIndex] += blockTxs[c];
 	}
