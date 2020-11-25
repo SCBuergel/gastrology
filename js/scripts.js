@@ -134,7 +134,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 	let maxBin = Math.max(...bins);
 	let deltaBin = (maxBin - minBin) / numColors;
 	console.log("minBin: " + minBin + ", maxBin: " + maxBin + ", deltaBin: " + deltaBin);
-	let colorLUT = [" ", "░", "▒", "▓", "█"];
+	let colorLUT = ["_", "░", "▒", "▓", "█"];
 	
 	if (maxBin == minBin) {
 		console.log("too few entries for rendering");
