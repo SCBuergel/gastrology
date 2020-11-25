@@ -119,7 +119,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 	console.log("globalMaxGasGWei: " + globalMaxGasGWei + ", globalMinGasGWei: " + globalMinGasGWei + ", delta: " + delta);
 
 	for (let c = 0; c < blockGasUsed.length; c++) {
-		let binIndex = Math.floor((blockTxs[c] - globalMinGasGWei) / (globalMaxGasGWei - globalMinGasGWei ) *delta);
+		let binIndex = Math.floor((blockTxs[c] - globalMinGasGWei) / (globalMaxGasGWei - globalMinGasGWei ) * numBins);
 		console.log("bin index: " + binIndex);
 		bins[binIndex] += blockGasUsed[c];
 	}
@@ -138,7 +138,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 	}
 
 	for (let c = 0; c < bins.length; c++) {
-		let colorIndex = Math.floor((bins[c] - minBin) / (maxBin - minBin) * deltaBin);
+		let colorIndex = Math.floor((bins[c] - minBin) / (maxBin - minBin) * numColors);
 		console.log("bin " + c + " has color " + colorIndex);
 		cell8.innerText += colorLUT[colorIndex];
 	}
