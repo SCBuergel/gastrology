@@ -116,7 +116,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
 		bins[c] = 0;
 	}
 	let delta = (globalMaxGasGWei - globalMinGasGWei) / numBins;
-	console.log("globalMaxGasGWei: " + globalMaxGasGWei + ", globalMinGasGWei: " + globalMaxGasGWei + ", delta: " + delta);
+	console.log("globalMaxGasGWei: " + globalMaxGasGWei + ", globalMinGasGWei: " + globalMinGasGWei + ", delta: " + delta);
 
 	for (let c = 0; c < blockGasUsed.length; c++) {
 		let binIndex = Math.floor((blockTxs[c] - globalMinGasGWei) / (globalMaxGasGWei - globalMinGasGWei ) *delta);
