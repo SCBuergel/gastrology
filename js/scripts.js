@@ -56,42 +56,35 @@ async function loadBlocks() {
   var myDiv = document.getElementById("outputDiv");
   myDiv.innerText = "Loading...";
 	let start = Date.now();
-	
-	/* TODO: 
-	 * 1. check if custom web3 project has already been create, if not -> create it and also proxy wrapper
-	 * 2. check if window.ethereum is available, otherwise fallback to Seb's infura:
-	 */
 
-	// create web3 object if it does not exist yet
-	if (typeof proxiedWeb3 == "undefined") {
-		console.log("did not find proxiedWeb3, creating now...");
-		let endpointInput = document.getElementById("web3Endpoint").value;
-    let endpoint;
+	// create web3 object (because web3 endpoint might have changed)
+	console.log("creating web3 object...");
+	let endpointInput = document.getElementById("web3Endpoint").value;
+  let endpoint;
 
-    // first try to use the default value (if that's written in input field):
-    if (endpointInput == "window.ethereum") {
-    	console.log("trying to use window.ethereum...");
-    	// if that does not exist, update UI and try fallback to Avado RYO
-    	if (typeof window.ethereum == "undefined") {
-    		console.log("cannot find window.ethereum, switching to Avado RYO...");
-    		endpoint = "https://mainnet.eth.cloud.ava.do";
-    		document.getElementById("web3Endpoint").value = "https://mainnet.eth.cloud.ava.do";
-    		document.getElementById("outputDiv").innerText = "Did not find local web3 provider, switched to Avado RYO. ";
-    	} else {
-    		console.log("seems ok, using window.ethereum...")
-    		endpoint = window.ethereum;
-    	}
+  // first try to use the default value (if that's written in input field):
+  if (endpointInput == "window.ethereum") {
+    console.log("trying to use window.ethereum...");
+    // if that does not exist, update UI and try fallback to Avado RYO
+    if (typeof window.ethereum == "undefined") {
+    	console.log("cannot find window.ethereum, switching to Avado RYO...");
+    	endpoint = "https://mainnet.eth.cloud.ava.do";
+    	document.getElementById("web3Endpoint").value = "https://mainnet.eth.cloud.ava.do";
+    	document.getElementById("outputDiv").innerText = "Did not find local web3 provider, switched to Avado RYO. ";
     } else {
-    	console.log("using custom web3 endpoint: " + endpointInput);
-    	// otherwise just try to use the one provided
-    	endpoint = endpointInput;
+    	console.log("seems ok, using window.ethereum...")
+    	endpoint = window.ethereum;
     }
+  } else {
+    console.log("using custom web3 endpoint: " + endpointInput);
+    // otherwise just try to use the one provided
+    endpoint = endpointInput;
+  }
 
-  	// finally create the objects and try using that endpoint to obtain the latest block number to see if all is ok
-  	console.log("now creating web3 object...");
-  	let web3 = new Web3(endpoint);
-  	proxiedWeb3 = new Proxy(web3, proxiedWeb3Handler);
-	}
+  // finally create the objects and try using that endpoint to obtain the latest block number to see if all is ok
+  console.log("now creating web3 object...");
+  let web3 = new Web3(endpoint);
+  proxiedWeb3 = new Proxy(web3, proxiedWeb3Handler);
 
 	// connection check to see if endpoint is available
 	console.log("trying to load latest block to see if all is ok...");
@@ -105,9 +98,9 @@ async function loadBlocks() {
 
 	let numBlocks = parseInt(document.getElementById("numBlocks").value);
 	numBlocks = numBlocks ? numBlocks : startBlock;
-	
+
 	var table = document.getElementById("gasTable");
-	
+
 	for (let blockNo = startBlock; blockNo > startBlock - numBlocks && running; blockNo--) {
 		if (txs.get(blockNo))
 			continue;
@@ -130,7 +123,7 @@ async function loadBlocks() {
 			console.log(gasPriceGWei);
       blockTxs.push(gasPriceGWei);
 		}));
-		
+
 		blockTxs.sort((a,b)=>a-b);
 		let tenthLowestGas = blockTxs.length > 20 ? blockTxs[9] : "-";
 		let minGas = blockTxs.length > 0 ? Math.min(...blockTxs) : "-";
@@ -150,7 +143,7 @@ async function loadBlocks() {
 		var cell5 = row.insertCell(5);
 		var cell6 = row.insertCell(6);
 		var cell7 = row.insertCell(7);
-		
+
 		cell0.innerHTML = blockNo;
 		cell1.innerHTML = blockTxs.length;
 		cell2.innerHTML = typeof minGas === 'number' ? minGas.toFixed(2) : "-";
@@ -159,7 +152,7 @@ async function loadBlocks() {
 		cell5.innerHTML = typeof averageGas === 'number' ? averageGas.toFixed(2) : "-";
 		cell6.innerHTML = typeof tenthHighestGas === 'number' ? tenthHighestGas.toFixed(2) : "-";
 		cell7.innerHTML = typeof maxGas === 'number' ? maxGas.toFixed(2) : "-";
-		
+
 		txs.set(blockNo, blockTxs);
 	}
 
