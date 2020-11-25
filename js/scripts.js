@@ -76,6 +76,8 @@ function createWeb3() {
 }
 
 function renderBlock(blockTxs) {
+	var table = document.getElementById("gasTable");
+
 	blockTxs.sort((a,b)=>a-b);
 	let tenthLowestGas = blockTxs.length > 20 ? blockTxs[9] : "-";
 	let minGas = blockTxs.length > 0 ? Math.min(...blockTxs) : "-";
@@ -132,8 +134,6 @@ async function loadBlocks() {
 
 	let numBlocks = parseInt(document.getElementById("numBlocks").value);
 	numBlocks = numBlocks ? numBlocks : startBlock;
-
-	var table = document.getElementById("gasTable");
 
 	for (let blockNo = startBlock; blockNo > startBlock - numBlocks && running; blockNo--) {
 		if (txs.get(blockNo))
