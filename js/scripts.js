@@ -98,7 +98,6 @@ function renderAll() {
 
 function renderBlock(blockNo, blockTxs, blockGasUsed, row = null) {
 	console.log("start rendering...");
-	var table = document.getElementById("gasTable");
 	blockTxs.sort((a,b)=>a-b);
 	let tenthLowestGas = blockTxs.length > 20 ? blockTxs[9] : "-";
 	let minGas = blockTxs.length > 0 ? Math.min(...blockTxs) : "-";
@@ -108,9 +107,13 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, row = null) {
 	let tenthHighestGas = blockTxs.length > 20 ? blockTxs[9] : "-";
 	let maxGas = blockTxs.length > 0 ? Math.max(...blockTxs) : "-";
 
-	console.log("row = " + row);
 	if (row == null)
 		row = table.insertRow();
+	else {
+		while (row.firstChild) {
+    	row.firstChild.remove()
+    }
+	}
 	var cell0 = row.insertCell(0);
 	var cell1 = row.insertCell(1);
 	var cell2 = row.insertCell(2);
@@ -130,7 +133,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, row = null) {
 	cell6.innerHTML = typeof tenthHighestGas === 'number' ? tenthHighestGas.toFixed(2) : "-";
 	cell7.innerHTML = typeof maxGas === 'number' ? maxGas.toFixed(2) : "-";
 	
-	const numBins = 20;
+	const numBins = 50;
 	let bins = [];
 	for (let c = 0; c < numBins; c++) {
 		bins[c] = 0;
