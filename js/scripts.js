@@ -167,7 +167,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, row = null) {
 	console.log("loaded bins");
 	let numColors = 5;
 	let minBin = findSmallestNonZero(...bins);
-	let maxBin = Math.max(...bins);
+	let maxBin = Math.max(bins);
 	let deltaBin = (maxBin - minBin) / numColors;
 	console.log("minBin: " + minBin + ", maxBin: " + maxBin + ", deltaBin: " + deltaBin);
 	let colorLUT = ["_", "░", "▒", "▓", "█"];
