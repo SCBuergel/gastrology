@@ -36,6 +36,7 @@ let txs = new Map();
 let running = false;
 let globalMinGasGWei = Number.MAX_SAFE_INTEGER;
 let globalMaxGasGWei = Number.MIN_SAFE_INTEGER;
+const numBins = 40;
 
 function resetAll() {
 	txs.forEach((val, key, map) => {
@@ -104,9 +105,10 @@ function renderAll() {
   let spectrumHeader = document.getElementById("spectrumHeader");
   let lower = globalMinGasGWei.toFixed(1);
   let higher = globalMaxGasGWei.toFixed(1);
-  let numSpaces = 30 - lower.length - higher.length - 14;
+  let numSpaces = numBins - 1 - lower.length - higher.length - 16;
+  consol.log("Going to inject " + numSpaces + " spaces");
 
-  spectrumHeader.innerText = "<-- " + lower + "GWei" + Array(numSpaces).join(" ") + higher + "GWei -->";
+  spectrumHeader.innerHTML = "gas price spectrum<br />|- " + lower + "GWei" + Array(numSpaces).join(" ") + higher + "GWei -|";
 
   console.log("rendering all...");
 	txs.forEach((val, key, map) => {
@@ -153,7 +155,6 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, row = null) {
 	cell6.innerHTML = typeof tenthHighestGas === 'number' ? tenthHighestGas.toFixed(2) : "-";
 	cell7.innerHTML = typeof maxGas === 'number' ? maxGas.toFixed(2) : "-";
 	
-	const numBins = 30;
 	let bins = [];
 	for (let c = 0; c < numBins; c++) {
 		bins[c] = 0;
