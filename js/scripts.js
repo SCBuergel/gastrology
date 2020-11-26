@@ -105,7 +105,7 @@ function renderAll() {
   let spectrumHeader = document.getElementById("spectrumHeader");
   let lower = globalMinGasGWei.toFixed(1);
   let higher = globalMaxGasGWei.toFixed(1);
-  let numSpaces = numBins + 1 - lower.length - higher.length - 15;
+  let numSpaces = numBins - lower.length - higher.length - 13;
   console.log("Going to inject " + numSpaces + " spaces");
 
   spectrumHeader.innerHTML = "gas price spectrum<br /><- " + lower + "GWei" + Array(numSpaces).join("&nbsp") + higher + "GWei ->";
