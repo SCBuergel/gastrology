@@ -88,10 +88,15 @@ function createWeb3() {
   proxiedWeb3 = new Proxy(web3, proxiedWeb3Handler);
 }
 
-function renderBlock(blockNo, blockTxs, blockGasUsed, rerenderAll) {
+function renderAll() {
+	txs.forEach((val, key, map) => {
+		renderBlock(key, val.gasPricesGWei, val.gasUsed);
+	});
+}
+
+function renderBlock(blockNo, blockTxs, blockGasUsed) {
 	console.log("start rendering...");
 	var table = document.getElementById("gasTable");
-
 	blockTxs.sort((a,b)=>a-b);
 	let tenthLowestGas = blockTxs.length > 20 ? blockTxs[9] : "-";
 	let minGas = blockTxs.length > 0 ? Math.min(...blockTxs) : "-";
@@ -209,8 +214,11 @@ async function loadBlocks() {
       blockGasUsed.push(gasUsed);
 		}));
 
-		let tableRow = renderBlock(blockNo, blockGasPrice, blockGasUsed, globalLimitsChanged);
+		if (globalLimitsChanged)
+			renderAll();
 
+		let tableRow = renderBlock(blockNo, blockGasPrice, blockGasUsed, globalLimitsChanged);
+	
 		txs.set(blockNo, 
 			{
 				gasPricesGWei: blockGasPrice,
