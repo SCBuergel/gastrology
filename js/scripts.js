@@ -89,7 +89,9 @@ function createWeb3() {
 }
 
 function renderAll() {
+	console.log("rendering all...");
 	txs.forEach((val, key, map) => {
+		console.log("now rendering block " + key);
 		renderBlock(key, val.gasPricesGWei, val.gasUsed, val.row);
 	});
 }
@@ -106,6 +108,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, row = null) {
 	let tenthHighestGas = blockTxs.length > 20 ? blockTxs[9] : "-";
 	let maxGas = blockTxs.length > 0 ? Math.max(...blockTxs) : "-";
 
+	console.log("row = " + row);
 	if (row == null)
 		row = table.insertRow();
 	var cell0 = row.insertCell(0);
