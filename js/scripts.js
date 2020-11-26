@@ -57,6 +57,15 @@ async function toggle() {
 	}
 }
 
+function findSmallestNonZero(data) {
+	let smallest = Number.MIN_SAFE_INTEGER;
+	for (let c = 0; c < data.length; c++) {
+		if (data[c] < smallest)
+			smallest = data[c];
+	}
+	return smallest;
+}
+
 function createWeb3() {
 	// create web3 object (because web3 endpoint might have changed)
 	console.log("creating web3 object...");
@@ -140,22 +149,22 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, row = null) {
 		bins[c] = 0;
 	}
 	let delta = (globalMaxGasGWei - globalMinGasGWei) / numBins;
-	console.log("globalMaxGasGWei: " + globalMaxGasGWei + ", globalMinGasGWei: " + globalMinGasGWei + ", delta: " + delta);
+	//console.log("globalMaxGasGWei: " + globalMaxGasGWei + ", globalMinGasGWei: " + globalMinGasGWei + ", delta: " + delta);
 
 	for (let c = 0; c < blockGasUsed.length; c++) {
 		let binIndex = Math.floor((blockTxs[c] - globalMinGasGWei) / (globalMaxGasGWei - globalMinGasGWei ) * (numBins - 1));
-		console.log("bin index: " + binIndex);
+		//console.log("bin index: " + binIndex);
 		bins[binIndex] += blockGasUsed[c];
 	}
 
 	for (let c = 0; c < bins.length; c++) {
 		bins[c] = bins[c] > 0 ? Math.log10(bins[c]) : bins[c];
-		console.log("bin " + c + ": " + bins[c]);
+		//console.log("bin " + c + ": " + bins[c]);
 	}
 
 	console.log("loaded bins");
 	let numColors = 5;
-	let minBin = Math.min(...bins);
+	let minBin = findSmallestNonZero(...bins);
 	let maxBin = Math.max(...bins);
 	let deltaBin = (maxBin - minBin) / numColors;
 	console.log("minBin: " + minBin + ", maxBin: " + maxBin + ", deltaBin: " + deltaBin);
@@ -167,7 +176,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, row = null) {
 	}
 
 	for (let c = 0; c < bins.length; c++) {
-		let colorIndex = Math.floor((bins[c] - minBin) / (maxBin - minBin) * (numColors - 1));
+		let colorIndex = bins[c] == 0 ? 0 : Math.floor((bins[c] - minBin) / (maxBin - minBin) * (numColors - 1));
 		console.log("bin " + c + " has color " + colorIndex);
 		cell8.innerText += colorLUT[colorIndex];
 	}
