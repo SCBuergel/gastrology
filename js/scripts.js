@@ -221,7 +221,7 @@ async function loadBlocks() {
 		if (globalLimitsChanged)
 			renderAll();
 
-		let tableRow = renderBlock(blockNo, blockGasPrice, blockGasUsed, globalLimitsChanged);
+		let tableRow = renderBlock(blockNo, blockGasPrice, blockGasUsed);
 	
 		txs.set(blockNo, 
 			{
