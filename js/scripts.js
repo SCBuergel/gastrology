@@ -59,10 +59,10 @@ async function toggle() {
 
 function findSmallestNonZero(data) {
 	let smallest = Number.MAX_SAFE_INTEGER;
-	console.log("processing smallest, length = " + data.length);
+	//console.log("processing smallest, length = " + data.length);
 	for (let c = 0; c < data.length; c++) {
-		if (data[c] < smallest) {
-		  console.log("new smallest: " + data[c]);
+		if (data[c] < smallest && data[c] > 0) {
+		  // console.log("new smallest: " + data[c]);
 			smallest = data[c];
 		}
 	}
