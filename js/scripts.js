@@ -108,7 +108,7 @@ function renderAll() {
   let numSpaces = numBins - 1 - lower.length - higher.length - 16;
   console.log("Going to inject " + numSpaces + " spaces");
 
-  spectrumHeader.innerHTML = "gas price spectrum<br />|- " + lower + "GWei" + Array(numSpaces).join(" ") + higher + "GWei -|";
+  spectrumHeader.innerHTML = "gas price spectrum<br />|- " + lower + "GWei" + Array(numSpaces).join("&nbsp") + higher + "GWei -|";
 
   console.log("rendering all...");
 	txs.forEach((val, key, map) => {
