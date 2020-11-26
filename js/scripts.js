@@ -146,7 +146,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, row = null) {
 	cell6.innerHTML = typeof tenthHighestGas === 'number' ? tenthHighestGas.toFixed(2) : "-";
 	cell7.innerHTML = typeof maxGas === 'number' ? maxGas.toFixed(2) : "-";
 	
-	const numBins = 50;
+	const numBins = 30;
 	let bins = [];
 	for (let c = 0; c < numBins; c++) {
 		bins[c] = 0;
@@ -207,7 +207,7 @@ async function loadBlocks() {
 
 	let numBlocks = parseInt(document.getElementById("numBlocks").value);
 	numBlocks = numBlocks ? numBlocks : startBlock;
-
+	var table = document.getElementById("gasTable");
 	for (let blockNo = startBlock; blockNo > startBlock - numBlocks && running; blockNo--) {
 		if (txs.get(blockNo))
 			continue;
@@ -217,8 +217,12 @@ async function loadBlocks() {
 
 		console.log("BLOCK " + blockNo + " (" + block.transactions.length + " txs)");
 		let globalLimitsChanged = false;
+		let processedTxs = 0;
 		// reading txs in parallel
-		await Promise.all(block.transactions.map(async (tx) => {
+		let row = table.insertRow();
+		let cell = row.insertCell(0);
+
+    await Promise.all(block.transactions.map(async (tx) => {
 			console.log("processing tx...");
 			let gasPriceGWei = (await proxiedWeb3.eth.getTransaction(tx)).gasPrice/1e9;
 			let gasUsed = (await proxiedWeb3.eth.getTransactionReceipt(tx)).gasUsed
@@ -233,8 +237,12 @@ async function loadBlocks() {
 			console.log(gasPriceGWei);
       blockGasPrice.push(gasPriceGWei);
       blockGasUsed.push(gasUsed);
+      let progress = ++processedTxs * 100 / block.transactions.length;
+      cell.innerText = "Loading block: " + progress + " %";
 		}));
 
+		row.remove();
+		
 		if (globalLimitsChanged)
 			renderAll();
 
