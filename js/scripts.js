@@ -98,6 +98,7 @@ function renderAll() {
 
 function renderBlock(blockNo, blockTxs, blockGasUsed, row = null) {
 	console.log("start rendering...");
+	var table = document.getElementById("gasTable");
 	blockTxs.sort((a,b)=>a-b);
 	let tenthLowestGas = blockTxs.length > 20 ? blockTxs[9] : "-";
 	let minGas = blockTxs.length > 0 ? Math.min(...blockTxs) : "-";
@@ -206,6 +207,7 @@ async function loadBlocks() {
 		let globalLimitsChanged = false;
 		// reading txs in parallel
 		await Promise.all(block.transactions.map(async (tx) => {
+			consol.log("processing tx...");
 			let gasPriceGWei = (await proxiedWeb3.eth.getTransaction(tx)).gasPrice/1e9;
 			let gasUsed = (await proxiedWeb3.eth.getTransactionReceipt(tx)).gasUsed
 			if (gasPriceGWei < globalMinGasGWei) {
