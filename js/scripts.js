@@ -207,7 +207,7 @@ async function loadBlocks() {
 		let globalLimitsChanged = false;
 		// reading txs in parallel
 		await Promise.all(block.transactions.map(async (tx) => {
-			consol.log("processing tx...");
+			console.log("processing tx...");
 			let gasPriceGWei = (await proxiedWeb3.eth.getTransaction(tx)).gasPrice/1e9;
 			let gasUsed = (await proxiedWeb3.eth.getTransactionReceipt(tx)).gasUsed
 			if (gasPriceGWei < globalMinGasGWei) {
