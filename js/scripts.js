@@ -101,7 +101,14 @@ function createWeb3() {
 }
 
 function renderAll() {
-	console.log("rendering all...");
+  let spectrumHeader = document.getElementById("spectrumHeader");
+  let lower = globalMinGasGWei.toFixed(1);
+  let higher = globalMaxGasGWei.toFixed(1);
+  let numSpaces = 30 - lower.length - higher.length - 14;
+
+  spectrumHeader.innerText = "<-- " + lower + "GWei" + Array(numSpaces).join(" ") + higher + "GWei -->";
+
+  console.log("rendering all...");
 	txs.forEach((val, key, map) => {
 		console.log("now rendering block " + key);
 		renderBlock(key, val.gasPricesGWei, val.gasUsed, val.row);
@@ -221,6 +228,7 @@ async function loadBlocks() {
 		// reading txs in parallel
 		let row = table.insertRow();
 		let cell = row.insertCell(0);
+		cell.innerText = "Loading block...";
 
     await Promise.all(block.transactions.map(async (tx) => {
 			console.log("processing tx...");
@@ -238,7 +246,7 @@ async function loadBlocks() {
       blockGasPrice.push(gasPriceGWei);
       blockGasUsed.push(gasUsed);
       let progress = ++processedTxs * 100 / block.transactions.length;
-      cell.innerText = "Loading block: " + progress + " %";
+      cell.innerText = "Loading block: " + progress.toFixed(1) + " %";
 		}));
 
 		row.remove();
