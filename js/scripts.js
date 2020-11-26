@@ -58,7 +58,7 @@ async function toggle() {
 }
 
 function findSmallestNonZero(data) {
-	let smallest = Number.MIN_SAFE_INTEGER;
+	let smallest = Number.MAX_SAFE_INTEGER;
 	for (let c = 0; c < data.length; c++) {
 		if (data[c] < smallest)
 			smallest = data[c];
