@@ -179,7 +179,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, row = null) {
 	}
 
 	for (let c = 0; c < bins.length; c++) {
-		let colorIndex = bins[c] == 0 ? 0 : Math.floor((bins[c] - minBin) / (maxBin - minBin) * (numColors - 1));
+		let colorIndex = bins[c] == 0 ? 0 : Math.floor((bins[c] - minBin) / (maxBin - minBin) * (numColors - 2) + 1);
 		console.log("bin " + c + " has color " + colorIndex);
 		cell8.innerText += colorLUT[colorIndex];
 	}
