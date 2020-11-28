@@ -172,6 +172,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, row = null) {
 		  colorIndex = colorLUT[numColors - 1];
 		else
 		  colorIndex = Math.floor((bins[c] - minBin) / (maxBin - minBin) * (numColors - 2) + 1);
+		console.log("colorIndex: " + colorIndex);
 		cell8.innerText += colorLUT[colorIndex];
 	}
 
