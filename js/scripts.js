@@ -167,7 +167,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, row = null) {
   let colorIndex;
 	for (let c = 0; c < bins.length; c++) {
 		if (maxBin == minBin)
-		  colorIndex = colorLUT(numColors - 1);
+		  colorIndex = colorLUT[numColors - 1];
 		else
 		  colorIndex = bins[c] == 0 ? 0 : Math.floor((bins[c] - minBin) / (maxBin - minBin) * (numColors - 2) + 1);
 		cell8.innerText += colorLUT[colorIndex];
