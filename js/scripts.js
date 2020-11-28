@@ -3,7 +3,6 @@ const promisify = (inner) =>
   new Promise((resolve, reject) =>
     inner((err, res) => {
       if (err) { reject(err) }
-
       resolve(res);
     })
   );
@@ -51,7 +50,6 @@ function resetAll() {
 
 async function toggle() {
 	running = !running;
-	console.log("Running: " + running);
 	if (running) {
   	document.getElementById("toggleButton").innerText = "Stop";
 		await loadBlocks();
@@ -60,10 +58,8 @@ async function toggle() {
 
 function findSmallestNonZero(data) {
 	let smallest = Number.MAX_SAFE_INTEGER;
-	//console.log("processing smallest, length = " + data.length);
 	for (let c = 0; c < data.length; c++) {
 		if (data[c] < smallest && data[c] > 0) {
-		  // console.log("new smallest: " + data[c]);
 			smallest = data[c];
 		}
 	}
@@ -72,13 +68,11 @@ function findSmallestNonZero(data) {
 
 function createWeb3() {
 	// create web3 object (because web3 endpoint might have changed)
-	console.log("creating web3 object...");
 	let endpointInput = document.getElementById("web3Endpoint").value;
   let endpoint;
 
   // first try to use the default value (if that's written in input field):
   if (endpointInput == "window.ethereum") {
-    console.log("trying to use window.ethereum...");
     // if that does not exist, update UI and try fallback to Avado RYO
     if (typeof window.ethereum == "undefined") {
     	console.log("cannot find window.ethereum, switching to Avado RYO...");
@@ -86,17 +80,15 @@ function createWeb3() {
     	document.getElementById("web3Endpoint").value = "https://mainnet.eth.cloud.ava.do";
     	document.getElementById("outputDiv").innerText = "Did not find local web3 provider, switched to Avado RYO. ";
     } else {
-    	console.log("seems ok, using window.ethereum...")
     	endpoint = window.ethereum;
     }
   } else {
-    console.log("using custom web3 endpoint: " + endpointInput);
     // otherwise just try to use the one provided
     endpoint = endpointInput;
   }
 
   // finally create the objects and try using that endpoint to obtain the latest block number to see if all is ok
-  console.log("now creating web3 object...");
+  //console.log("now creating web3 object...");
   let web3 = new Web3(endpoint);
   proxiedWeb3 = new Proxy(web3, proxiedWeb3Handler);
 }
@@ -106,19 +98,15 @@ function renderAll() {
   let lower = globalMinGasGWei.toFixed(1);
   let higher = globalMaxGasGWei.toFixed(1);
   let numSpaces = numBins - lower.length - higher.length - 13;
-  console.log("Going to inject " + numSpaces + " spaces");
 
   spectrumHeader.innerHTML = "gas price spectrum<br /><- " + lower + "GWei" + Array(numSpaces).join("&nbsp") + higher + "GWei ->";
 
-  console.log("rendering all...");
 	txs.forEach((val, key, map) => {
-		console.log("now rendering block " + key);
 		renderBlock(key, val.gasPricesGWei, val.gasUsed, val.row);
 	});
 }
 
 function renderBlock(blockNo, blockTxs, blockGasUsed, row = null) {
-	console.log("start rendering...");
 	var table = document.getElementById("gasTable");
 	blockTxs.sort((a,b)=>a-b);
 	let tenthLowestGas = blockTxs.length > 20 ? blockTxs[9] : "-";
@@ -173,12 +161,12 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, row = null) {
 		//console.log("bin " + c + ": " + bins[c]);
 	}
 
-	console.log("loaded bins");
+	//console.log("loaded bins");
 	let numColors = 5;
 	let minBin = findSmallestNonZero(bins);
 	let maxBin = Math.max(...bins);
 	let deltaBin = (maxBin - minBin) / numColors;
-	console.log("minBin: " + minBin + ", maxBin: " + maxBin + ", deltaBin: " + deltaBin);
+	//console.log("minBin: " + minBin + ", maxBin: " + maxBin + ", deltaBin: " + deltaBin);
 	let colorLUT = ["_", "░", "▒", "▓", "█"];
 	
 	if (maxBin == minBin) {
@@ -188,7 +176,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, row = null) {
 
 	for (let c = 0; c < bins.length; c++) {
 		let colorIndex = bins[c] == 0 ? 0 : Math.floor((bins[c] - minBin) / (maxBin - minBin) * (numColors - 2) + 1);
-		console.log("bin " + c + " has color " + colorIndex);
+		//console.log("bin " + c + " has color " + colorIndex);
 		cell8.innerText += colorLUT[colorIndex];
 	}
 
@@ -204,7 +192,7 @@ async function loadBlocks() {
 	createWeb3();
 
 	// connection check to see if endpoint is available
-	console.log("trying to load latest block to see if all is ok...");
+	//console.log("trying to load latest block to see if all is ok...");
 	let latestBlockFromChain = await proxiedWeb3.eth.getBlockNumber();
 
 	let startBlock = parseInt(document.getElementById("startBlock").value);
@@ -223,16 +211,20 @@ async function loadBlocks() {
 	  let blockGasPrice = []; // not using JSON object for these 2 arrays to make processing easier
 	  let blockGasUsed = [];
 
-		console.log("BLOCK " + blockNo + " (" + block.transactions.length + " txs)");
+		//console.log("BLOCK " + blockNo + " (" + block.transactions.length + " txs)");
 		let globalLimitsChanged = false;
 		let processedTxs = 0;
 		// reading txs in parallel
 		let row = table.insertRow();
 		let cell = row.insertCell(0);
+		row.insertCell(1);
+		row.insertCell(2);
+		cell.colSpan = 3;
+
 		cell.innerText = "Loading block...";
 
     await Promise.all(block.transactions.map(async (tx) => {
-			console.log("processing tx...");
+			//console.log("processing tx...");
 			let gasPriceGWei = (await proxiedWeb3.eth.getTransaction(tx)).gasPrice/1e9;
 			let gasUsed = (await proxiedWeb3.eth.getTransactionReceipt(tx)).gasUsed
 			if (gasPriceGWei < globalMinGasGWei) {
@@ -243,7 +235,7 @@ async function loadBlocks() {
 				globalMaxGasGWei = gasPriceGWei;
 				globalLimitsChanged = true;
 			}
-			console.log(gasPriceGWei);
+			//console.log(gasPriceGWei);
       blockGasPrice.push(gasPriceGWei);
       blockGasUsed.push(gasUsed);
       let progress = ++processedTxs * 100 / block.transactions.length;
