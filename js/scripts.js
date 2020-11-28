@@ -148,35 +148,28 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, row = null) {
 		bins[c] = 0;
 	}
 	let delta = (globalMaxGasGWei - globalMinGasGWei) / numBins;
-	//console.log("globalMaxGasGWei: " + globalMaxGasGWei + ", globalMinGasGWei: " + globalMinGasGWei + ", delta: " + delta);
 
 	for (let c = 0; c < blockGasUsed.length; c++) {
 		let binIndex = Math.floor((blockTxs[c] - globalMinGasGWei) / (globalMaxGasGWei - globalMinGasGWei ) * (numBins - 1));
-		//console.log("bin index: " + binIndex);
 		bins[binIndex] += blockGasUsed[c];
 	}
 
 	for (let c = 0; c < bins.length; c++) {
 		bins[c] = bins[c] > 0 ? Math.log10(bins[c]) : bins[c];
-		//console.log("bin " + c + ": " + bins[c]);
 	}
 
-	//console.log("loaded bins");
 	let numColors = 5;
 	let minBin = findSmallestNonZero(bins);
 	let maxBin = Math.max(...bins);
 	let deltaBin = (maxBin - minBin) / numColors;
-	//console.log("minBin: " + minBin + ", maxBin: " + maxBin + ", deltaBin: " + deltaBin);
 	let colorLUT = ["_", "░", "▒", "▓", "█"];
 	
-	if (maxBin == minBin) {
-		console.log("too few entries for rendering");
-		return row;
-	}
-
+  let colorIndex;
 	for (let c = 0; c < bins.length; c++) {
-		let colorIndex = bins[c] == 0 ? 0 : Math.floor((bins[c] - minBin) / (maxBin - minBin) * (numColors - 2) + 1);
-		//console.log("bin " + c + " has color " + colorIndex);
+		if (maxBin == minBin)
+		  colorIndex = colorLUT(numColors - 1);
+		else
+		  colorIndex = bins[c] == 0 ? 0 : Math.floor((bins[c] - minBin) / (maxBin - minBin) * (numColors - 2) + 1);
 		cell8.innerText += colorLUT[colorIndex];
 	}
 
@@ -211,10 +204,9 @@ async function loadBlocks() {
 	  let blockGasPrice = []; // not using JSON object for these 2 arrays to make processing easier
 	  let blockGasUsed = [];
 
-		//console.log("BLOCK " + blockNo + " (" + block.transactions.length + " txs)");
 		let globalLimitsChanged = false;
 		let processedTxs = 0;
-		// reading txs in parallel
+		
 		let row = table.insertRow();
 		let cell = row.insertCell(0);
 		row.insertCell(1);
@@ -224,7 +216,6 @@ async function loadBlocks() {
 		cell.innerText = "Loading block...";
 
     await Promise.all(block.transactions.map(async (tx) => {
-			//console.log("processing tx...");
 			let gasPriceGWei = (await proxiedWeb3.eth.getTransaction(tx)).gasPrice/1e9;
 			let gasUsed = (await proxiedWeb3.eth.getTransactionReceipt(tx)).gasUsed
 			if (gasPriceGWei < globalMinGasGWei) {
@@ -235,7 +226,6 @@ async function loadBlocks() {
 				globalMaxGasGWei = gasPriceGWei;
 				globalLimitsChanged = true;
 			}
-			//console.log(gasPriceGWei);
       blockGasPrice.push(gasPriceGWei);
       blockGasUsed.push(gasUsed);
       let progress = ++processedTxs * 100 / block.transactions.length;
