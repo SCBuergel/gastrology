@@ -169,7 +169,7 @@ function renderBlock(blockNo, blockTxs, blockGasUsed, row = null) {
 		if (bins[c] == 0)
 		  colorIndex = 0;
 		else if (maxBin == minBin)
-		  colorIndex = colorLUT[numColors - 1];
+		  colorIndex = numColors - 1;
 		else
 		  colorIndex = Math.floor((bins[c] - minBin) / (maxBin - minBin) * (numColors - 2) + 1);
 		console.log("colorIndex: " + colorIndex);
