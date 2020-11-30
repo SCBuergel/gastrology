@@ -78,7 +78,7 @@ function createWeb3() {
     	console.log("cannot find window.ethereum, switching to Avado RYO...");
     	endpoint = "https://mainnet.eth.cloud.ava.do";
     	document.getElementById("web3Endpoint").value = "https://mainnet.eth.cloud.ava.do";
-    	document.getElementById("outputDiv").innerText = "Did not find local web3 provider, switched to Avado RYO. ";
+    	document.getElementById("outputDiv").innerHTML = "<b>Did not find local web3 provider, switched to <a href='https://status.cloud.ava.do/' target='_blank'>Avado Run-Your-Own Cloud</a>.</b>";
     } else {
     	endpoint = window.ethereum;
     }
